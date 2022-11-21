@@ -1,17 +1,22 @@
 # hmmjs
-client side mongoose like database query interface
 
-Tired of REST api definition? Wanna go fast? Hmm come to help.
+Tired of REST api definition? Wanna go fast? `Hmm` come to help.
 
-Get rid of a ton of bored API endpoints:
+With `Hmm`, you can query your data in db from front-end side. No more API call required.
+
+Mongodb driver, mongoose supported (Read executor.*.test.js for example)
+
+Get rid of a ton of bored API end-points:
 
 ![](assets/images/ordinal.png)
 
-Just define one and only one endpoint. Then query directly from front-end side.
+Just define one and only one end-point for transfering hmm payload between client side and server side.
+
+Then query directly from front-end side as image below.
 
 ![](assets/images/hmm.png)
 
-### Testing
+### Playaround
 
 `npm i && npm run dev`
 
