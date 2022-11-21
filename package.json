@@ -1,6 +1,6 @@
 {
   "name": "hmmjs",
-  "version": "1.0.0",
+  "version": "0.69.420",
   "description": "client side mongoose like database query interface",
   "main": "index.js",
   "scripts": {
