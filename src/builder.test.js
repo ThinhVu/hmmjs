@@ -1,8 +1,8 @@
-const hmmFactory = require('./builder')
+const hmmBuilder = require('./builder')
 
 describe('hmm-builder', function () {
-  it('should build correct post payload', () => {
-    const hmm = hmmFactory(() => {})
+  it('should build', () => {
+    const hmm = hmmBuilder(() => {})
     const hmm2Str = hmm.user.find({_id: 1}, {username: 1, password: 1}).sort({createdDate: -1}).limit(10).toString()
     const output = {
       model: 'user',
@@ -15,10 +15,9 @@ describe('hmm-builder', function () {
     expect(hmm2Str).toEqual(JSON.stringify(output))
   })
 
-  it('should post a payload', async () => {
-    const post = payload => fetch({ method: 'POST', url: 'http://localhost:3000/api/', body: payload })
+  it('should call send method', async () => {
     const mockPost = jest.fn(payload => "RESPONSE:" +  JSON.stringify(payload))
-    const hmm = hmmFactory(mockPost)
+    const hmm = hmmBuilder(mockPost)
     const qry = hmm.user.find({_id: 1}, { username: 1, password: 1 }).sort({createdDate: -1}).limit(10)
     const hmm2Str = qry.toString()
     const rs = await qry.$

@@ -1,23 +1,14 @@
 const executorFac = require('./executor')
-const {ObjectID} = require('mongodb')
 const {default: db, model, Schema} = require('mongoose')
-const UserModel = model('User', new Schema({u: String, p: String, age: Number}))
 
 let hmmExec;
 
 describe('executor', () => {
   beforeAll(async () => {
     await db.connect('mongodb://localhost:27017/hmm')
-    const dbi = { user: UserModel }
-    const convertArgs = args => args.map(arg => typeof (arg) !== 'object'
-        ? arg
-        : Object.keys(arg).reduce((prev, k) => {
-          prev[k] = k === '_id'
-              ? new ObjectID(arg[k])
-              : arg[k];
-          return prev
-        }, {}))
-    hmmExec = executorFac(dbi, convertArgs)
+    const UserModel = model('User', new Schema({u: String, p: String, age: Number}))
+    const dbDriver = { user: UserModel }
+    hmmExec = executorFac(dbDriver)
     // init user
     await UserModel.deleteMany()
     for (let i = 0; i < 100; ++i)

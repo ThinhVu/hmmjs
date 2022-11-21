@@ -14,8 +14,14 @@ const chain = hmm => new Proxy({}, {
   }
 })
 
-module.exports = send => new Proxy({}, {
+const builder = send => new Proxy({}, {
   get(target, p) {
     return chain({send, payload: {model: p, fns: []}})
   }
 })
+
+if (window) {
+  window.HmmBuilder = builder
+} else {
+  module.exports = builder
+}
