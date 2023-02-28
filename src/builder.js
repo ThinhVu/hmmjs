@@ -20,8 +20,4 @@ const builder = send => new Proxy({}, {
   }
 })
 
-if (window) {
-  window.HmmBuilder = builder
-} else {
-  module.exports = builder
-}
+module.exports = builder
