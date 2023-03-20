@@ -8,7 +8,7 @@ const chain = hmm => new Proxy({}, {
       default:
         return function (...args) {
           hmm.payload.fns.push({n: p, args})
-          return chain(hmm)
+          return this;
         }
     }
   }
