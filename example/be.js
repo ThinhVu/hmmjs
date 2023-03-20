@@ -1,25 +1,31 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const app = express()
+const {MongoClient} = require('mongodb');
+const jsonFn = require('json-fn');
 const executorFac = require('../src/executor')
-const {default: db, model, Schema} = require('mongoose')
 
 const start = async () => {
   // db init
-  await db.connect('mongodb://localhost:27017/hmm')
-  const UserModel = model('User', new Schema({u: String, p: String, age: Number}))
-  const dbDriver = { user: UserModel }
+  const client = new MongoClient('mongodb://localhost:27017');
+  const database = client.db('hmm')
+  const dbDriver = new Proxy({}, {
+    get(__, p) {return database.collection(p)}
+  })
 
+  const app = express()
   // hmm init
   const hmm = executorFac(dbDriver, { logLevel: 'log' })
+  app.post('/api', bodyParser.raw({limit: '50mb', type: () => true}),
+      async (req, res) =>
+          hmm(jsonFn.parse(req.body.toString()))
+          .then(rs => res.json(rs))
+          .catch(e => res.status(400).send(e.message)));
 
-  // express stuff
+
+  // these stuff must call after hmm
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
   app.use(express.static('.'))
-
-  app.post('/api', (req, res) =>
-      hmm(req.body).then(rs => res.json(rs)).catch(e => res.status(400).end()))
 
   app.listen(3000, () => console.log('http://localhost:3000/example'))
 }
