@@ -11,8 +11,8 @@ const start = async () => {
   const dbDriver = new Proxy({}, {
     get(__, p) {return database.collection(p)}
   })
-
   const app = express()
+
   // hmm init
   const hmm = executorFac(dbDriver, { logLevel: 'log' })
   app.post('/api', bodyParser.raw({limit: '50mb', type: () => true}),
@@ -20,7 +20,6 @@ const start = async () => {
           hmm(jsonFn.parse(req.body.toString()))
           .then(rs => res.json(rs))
           .catch(e => res.status(400).send(e.message)));
-
 
   // these stuff must call after hmm
   app.use(bodyParser.json())

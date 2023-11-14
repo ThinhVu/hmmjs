@@ -10,12 +10,16 @@
 <body>
 <script>
   window.onload = async () => {
-    const send = async payload => (await axios.post('http://localhost:3000/api', JSONfn.stringify(payload))).data
-    const hmm = HmmBuilder(send)
-    // const rs = await hmm.user.insert({_id: "637af32965a40ad9d029d3d7", user: 'Thinh', password: '123'}).$
-    // console.log(rs)
-    await hmm.product.insert({name: 'Cola', price: 10, tax: 13}).$
-    // write anything you want, directly from frontend
+    const url = 'http://localhost:3000/api'
+    const send = async (payload) => {
+      const {data} = await axios.post(url, JSONfn.stringify(payload))
+      return data
+    }
+    const Model = HmmBuilder(send)
+    const UserModel = Model('user');
+    await UserModel.insertOne({user: 'admin', password: '123'})
+    const admin = await UserModel.findOne({user: 'admin'})
+    console.log('admin', admin)
   }
 </script>
 </body>

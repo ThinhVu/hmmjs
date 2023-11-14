@@ -1,27 +1,27 @@
-const chain = hmm => new Proxy({}, {
-  get(target, p) {
-    switch (p) {
-      case '$':
-        return hmm.send(hmm.payload);
-      case 'toString':
-        return () => JSON.stringify(hmm.payload)
-      default:
-        return function (...args) {
-          hmm.payload.fns.push({n: p, args})
-          return this;
+function HmmBuilderFactory(send) {
+  return function Model(name) {
+    const model = {__name: `Model_${name}`}
+    let payload = {model: name, fns: []}
+    return new Proxy(model, {
+      get(target, p) {
+        switch (p) {
+          case 'then':
+            return (resolve, reject) => {
+              let sendPayload = payload;
+              payload = {model: name, fns: []}
+              send(sendPayload).then(resolve).catch(reject)
+            }
+          default:
+            return function next(...args) {
+              payload.fns.push({method: p, args})
+              return this;
+            }
         }
-    }
+      }
+    })
   }
-})
-
-const builder = send => new Proxy({}, {
-  get(target, p) {
-    return chain({send, payload: {model: p, fns: []}})
-  }
-})
-
-if (window) {
-  window.HmmBuilder = builder
-} else {
-  module.exports = builder
 }
+window.HmmBuilder = HmmBuilderFactory
+
+
+
