@@ -35,7 +35,7 @@ app.post(
 app.listen(3000)
 ```
 
-Then query directly from front-end side as simple as below.
+Then query directly from front-end side or serverless app as simple as below.
 
 ```html
 <script>
