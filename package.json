@@ -1,6 +1,6 @@
 {
   "name": "@tvux/hmmjs",
-  "version": "0.69.420",
+  "version": "0.69.421",
   "description": "client side mongoose like database query interface",
   "main": "./src/executor.js",
   "scripts": {
