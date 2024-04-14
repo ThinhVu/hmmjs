@@ -13,7 +13,7 @@ function HmmBuilderFactory(send) {
             return () => JSON.stringify({model, payload})
           default:
             return function next(...args) {
-              payload.fns.push({method: p, args})
+              payload.fns.push({m: p, args})
               return this;
             }
         }
